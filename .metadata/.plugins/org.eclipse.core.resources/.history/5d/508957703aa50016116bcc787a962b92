@@ -1,0 +1,104 @@
+import java.util.*; 
+public class Queue {
+private Node first = new Node(); 
+private Node last = this.first; 
+
+public void enqueue(Customer c){
+	
+    Node temp  = new Node(c); 
+    Node current = first; 
+    while(current.hasNext() != false){
+    	current = current.getNext(); 
+    }
+    current.next = temp;
+    this.last = temp;
+	
+} 
+
+public Customer returnElement() {
+	return first.element; 
+}
+
+
+public Customer dequeue() {
+	Customer temp = first.element;
+	this.first = this.first.next;
+	return temp;
+}
+
+public Customer first() {
+	return this.first.element; 
+
+}
+
+
+
+
+public int length(){
+	int count = 0; 
+	Node current = this.first; 
+	while(current.hasNext() != false){
+		count ++; 
+		current = current.getNext(); 
+	}
+	return count; 
+}
+
+	
+private class Node {
+		Customer element;
+		Node next; 
+		
+		
+		 private Node(){
+		   this.element = null; 
+		   this.next  =  null;
+		}
+		
+		private Node(Customer c){
+			   this.element = c; 
+			   this.next  =  null;
+			}
+		
+		private Node getNext(){
+			return this.next; 
+			
+		}
+		
+		private boolean hasNext(){
+			return this.next != null;
+		}
+		
+		private void setNext(Node next){
+			this.next = next; 
+		}
+
+		
+}
+	
+	
+	
+	public static void main(String [] args) {
+	     
+		Customer customer1 = new Customer(2, 6); 
+		Customer customer2 = new Customer(30, 7); 
+		Customer customer3 = new Customer(25, 15); 
+		Customer customer4 = new Customer(60, 30); 
+		Customer customer5 = new Customer(100,55);
+	    Queue one = new Queue();
+	    one.enqueue(customer1);
+	    one.enqueue(customer2);
+	    one.enqueue(customer3);
+	    one.enqueue(customer4);
+	    one.enqueue(customer5);
+	    
+	    System.out.println("The number of customer in the queue :" + one.length());
+	    //one.dequeue();
+	    System.out.println("The number of customer in the queue :" + one.length());
+	    //one.dequeue();
+	    System.out.println("The number of customer in the queue :" + one.length());
+	    System.out.println("The number of customer in the queue :" + one.first().return_groceries());
+	    
+	}
+
+}

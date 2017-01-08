@@ -1,0 +1,28 @@
+import static org.junit.Assert.assertEquals;
+import java.io.IOException;
+
+import org.junit.Test;
+import junit.framework.*;
+import static org.junit.Assert.*;
+
+public class Testavatar {
+
+  
+  @Test
+public void testCurrentRoom() throws IOException{
+	Room r = new Room();
+	r.setName("Room 5");
+	Avatar a = new Avatar(); 
+	a.setNewRoom(r); 
+	assertEquals(a.currentRoom, "Room 5"); 
+}
+  
+@Test 
+public void testcouse(){
+	
+}
+
+	
+	
+	
+}

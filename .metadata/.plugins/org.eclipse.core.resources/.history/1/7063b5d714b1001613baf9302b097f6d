@@ -1,0 +1,293 @@
+import java.io.*;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class Room {
+	String name;
+	String desc;
+	String[] NextRooms;
+	String[] DoorsOpenStatus;
+	Teacher teacher;
+	Student student;
+	Book b; 
+	Key k; 
+	//PlayerItem i;
+
+	//=======================================
+	//Contstructors
+
+	public Room() throws IOException{
+	}
+
+
+	public Room(String name) throws IOException{
+	this.name= name;
+	this.NextRooms = new String[4];
+	this.DoorsOpenStatus = new String[4];
+
+	}
+
+//===========================
+//Getters
+
+	public String getName(){
+		return this.name;
+	}
+
+	public String[] getNextRooms(){
+		return this.NextRooms;
+	}
+
+	public Teacher getTeacher(){
+		return this.teacher;
+	}
+
+	public Student getStudent(){
+		return this.student;
+	}
+	
+	public Key getKey(){
+		return this.k; 
+	}
+	public Book getBook(){
+		return this.b; 
+	}
+
+	public String[] getDoorOpenStatus(){
+		return this.DoorsOpenStatus;
+	}
+
+	public String getDoorStatus(String dir){
+		int i;
+		if (dir.equals("north")){
+			i = 0;
+		}
+		else if (dir.equals("east")){
+			i = 1;
+		}
+		else if (dir.equals("south") ){
+			i = 2;
+		}
+		else {
+		 i = 3;
+		}
+	 return this.DoorsOpenStatus[i];
+	}
+
+//=================================
+//Setters
+
+	public void setName(String s){
+		this.name = s;
+	}
+
+	public void setRoom(String desc){
+		this.desc= desc;
+	}
+
+//==========================================
+//for movement
+
+	public String getDirection(String dir){
+	if (dir.equals("north")){
+		return this.getNorth();
+	}
+	else if (dir.equals("south")){
+		return this.getSouth();
+ 		}
+
+	else if (dir.equals("west")){
+		return this.getWest();
+	 	}
+
+	else {
+		return this.getEast();
+	 	}
+	}
+
+//================================
+
+	public String getNorth(){
+		return this.NextRooms[0];
+	}
+
+	public String getEast(){
+		return this.NextRooms[1];
+	}
+
+	public String getSouth(){
+		return this.NextRooms[2];
+	}
+	public String getWest(){
+			return this.NextRooms[3];
+	}
+
+//======================================
+//Add for X
+	public boolean isOpen(String dir){
+		if (getDoorStatus(dir).equals("True")){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+//========================================
+/*
+	public String[] getThisRoomStrings() {
+		String thisRoom= this.desc;
+		String[] allRooms = this.w.returnRoomList();
+		String[] thisRoomString = new String[8];
+
+	  for(String s: allRooms) {
+			String[] RoomsAttributes =s.split(";");
+			if(RoomsAttributes[0].equals(thisRoom)) {
+				thisRoomString = RoomsAttributes;
+			}
+		}
+		return thisRoomString;
+
+	}
+*/
+
+//=============================================
+//updates room
+
+	public void updateNextRooms(String[] arr){
+		this.NextRooms[0] = arr[1];
+		this.NextRooms[1] = arr [2];
+		this.NextRooms[2] = arr [3];
+		this.NextRooms[3]= arr [4];
+	}
+
+
+public void updateDoorStatus(String[] arr){
+	this.DoorsOpenStatus[0] = arr[5];
+	this.DoorsOpenStatus[1] = arr [6];
+	this.DoorsOpenStatus[2] = arr [7];
+	this.DoorsOpenStatus[3]= arr [8];
+
+}
+
+
+public void addRandomKey(ArrayList<Key> Keyarr){
+	Random randomGenerator = new Random();
+	int probability = 80;
+	int randomInt= randomGenerator.nextInt(100);
+	if (randomInt< probability){
+		int index = randomGenerator.nextInt(Keyarr.size());
+		this.b = Bookarr.get(index);
+	}
+	else {
+		this.b = new Book("There is no book in this room");
+	}
+}
+
+public void addRandomBook(ArrayList<Book> Bookarr){
+	Random randomGenerator = new Random();
+	int probability = 80;
+	int randomInt= randomGenerator.nextInt(100);
+	if (randomInt< probability){
+		int index = randomGenerator.nextInt(Bookarr.size());
+		this.b = Bookarr.get(index);
+	}
+	else {
+		this.b = new Book("There is no book in this room");
+	}
+}
+
+
+public void addRandomTeacher(ArrayList<Teacher> arr){
+	Random randomGenerator = new Random();
+	int probability = 70;
+	int randomInt= randomGenerator.nextInt(100);
+	if (randomInt< probability){
+		int index = randomGenerator.nextInt(arr.size());
+		this.teacher = arr.get(index);
+	}
+	else {
+		this.teacher = new Teacher("There is no teacher");
+	}
+}
+
+public void addRandomStudent(Student s){
+	this.student = s;
+}
+
+//==================================================
+/*
+public void addRandomStudent(){
+	Random randomGenerator = new Random();
+	int probability = 70;
+	int randomInt= randomGenerator.nextInt(100);
+	if (randomInt< probability){
+		int index = randomGenerator.nextInt(arr.size());
+		this.teacher = arr.get(index);
+	}
+	else {
+		this.teacher = new Teacher("There is no teacher");
+	}
+}
+*/
+
+//==============================================
+
+	public static void main(String [] args) throws IOException {
+
+		//Room r = w.getRoomFromName("Room 1357");
+		//ArrayList<Teacher> arr1 = w.returnAllTeachers();
+		//ArrayList<Room> arr2 = w.returnWorldRooms();
+		//r.addRandomTeacher(arr1);
+		//System.out.println(r.getTeacher());
+
+		//System.out.println(r.getTeacher().getTeachername());
+
+
+		/*System.out.println(r.getNorth());
+		System.out.println(r.getEast());
+		System.out.println(r.getSouth());
+		System.out.println(r.getWest());
+		System.out.println(r.isOpen("north"));
+		System.out.println(r.isOpen("east"));
+		System.out.println(r.isOpen("south"));
+		System.out.println(r.isOpen("west"));
+
+*/
+
+
+
+
+
+
+
+
+	}
+
+	/*
+	public Room roomToNorth(Room r){
+		return this.North = r;
+
+	}
+
+	public Room roomToSouth(Room r){
+		return this.South = r;
+
+		}
+
+	public Room roomToWest(Room r){
+		return this.West = r;
+	}
+
+	public Room roomToEast(Room r){
+		return this.East = r;
+
+}*/
+
+
+
+
+
+
+}

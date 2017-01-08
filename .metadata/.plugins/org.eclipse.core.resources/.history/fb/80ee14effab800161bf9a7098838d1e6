@@ -1,0 +1,428 @@
+
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
+import java.io.IOException;
+
+
+
+/*class Avatar is a class where Avatar charcter and method defined 
+ 
+ * */
+
+public class Avatar {
+	ArrayList<Course> finishedCourse;
+	ArrayList<Course> unfinishedCourse;
+	Bag inventory;
+	Room currentRoom;
+	World theWorld;
+
+
+	//public enum Direction {NORTH, SOUTH, EAST, WEST};
+
+//===============================================
+//Constructor
+	public Avatar(Room startRoom, World world) throws IOException{
+		this.finishedCourse = new ArrayList<Course>();
+		this.unfinishedCourse = new ArrayList<Course>(0);
+		this.inventory = new Bag();
+		this.currentRoom= startRoom;
+		this.theWorld= world;
+	}
+
+//==========================================
+	/* return the current room where Avatar is found
+	 * */
+	public Room returnCurrentRoom(){
+		return this.currentRoom;
+	}
+	
+	/* set the current room where Avatar is found to new room 
+	 * @param room 
+	 * */
+ 
+	public void setNewRoom(Room room){
+		this.currentRoom = room;
+	}
+	/* Return inventory from bag
+	 * */
+	public Bag getInventory(){
+		return this.inventory;
+	}
+
+//=================================================
+	
+	/* return the list of finished course array 
+	 * */
+	public ArrayList<Course> returnunfinishedCourse(){
+		return this.unfinishedCourse;
+	}
+	/* return the list of unfinished course array 
+	 * */
+
+	public ArrayList<Course> returnfinishedCourse(){
+		return this.finishedCourse;
+	}
+
+//=================================================
+	
+	/* change the direction of the room, if the room is open state the name of the room
+	 * while changing direction, if the room is closed, state the door is locked
+	 * @param  dir
+	 * */
+
+	public void changeRoom(Room.Direction dir) throws IOException{
+		String roomName = this.currentRoom.getDirection(dir);
+			if (!(roomName.equals("X"))){
+				if (currentRoom.isOpen(dir)){
+					this.currentRoom = this.theWorld.getRoomFromName(roomName);
+				}
+				else {
+					System.out.println("The door is locked."); // we need to use key here 
+				}
+			}
+			else {
+				System.out.println("There is no room in that direction.");
+			}
+	}
+	
+
+//
+
+	/* change the direction of the room, if the room is open state the name of the room
+	 * while changing direction, if the room is closed, state the door is locked
+	 * */
+public void unlockDoor(Room.Direction dir){
+	String roomname = currentRoom.getDirection(dir);
+	Room r = this.theWorld.getRoomFromName(roomname);
+	this.currentRoom.unlockDoor(dir, r);
+}
+//=====================================================
+	public String useKey(){
+		for(int i = 0; i < inventory.size; ++i){
+			if(inventory.returnIndexitem(i) instanceof Key){
+				return (String) inventory.returnIndexitem(i);
+			}
+
+		}
+		return null;
+	}
+
+//=================================================================
+	/* To check the course exist on unfinished course list;
+	 *
+	 */
+
+	 public boolean isCourseExistedInunFinishedCourse(Course course){
+	 boolean found = false;
+	 for(int i = 0; i < unfinishedCourse.size(); ++i){
+		 if(unfinishedCourse.get(i).returnCourseName().equals(course.returnCourseName())){
+			 found = true;
+			 return found;
+		 }
+	 }
+	 return false;
+ }
+
+	 
+	 public void  talkTootherStudent(Avatar a, Student s ){
+		 assert(s != null); 
+		 System.out.println("Hej my name is:" + s.studentName + " I finished this: " + s.returnFinshedcourse().returnCourseName() + " and unfinishedcouse :" + s.returnunFinshedcourse().returnCourseName());
+		 System.out.println("You: I have finished " + a.finishedCourse.size() + "unfinishedcourse");
+		 
+		 
+	 }
+    /* To check the course exist on unfinished course list;
+	 *
+	 */
+
+
+	 public boolean isCourseExistedInFinishedCourse(Course course){
+	 boolean found = false;
+
+	 for(int i = 0; i < finishedCourse.size(); ++i){
+		 if(finishedCourse.get(i).returnCourseName().equals(course.returnCourseName())){
+			 found = true;
+			 return found;
+		 }
+	 }
+	 return false;
+ }
+
+//===========================================================================
+
+ public Course returnFinishedCourse(Course course){
+				 Course c = null;
+		for(int i = 0; i < finishedCourse.size(); ++i){
+			if(finishedCourse.get(i).returnCourseName().equals(course.returnCourseName())){
+				c = finishedCourse.get(i);
+				return c;
+			}
+		}
+		return c;
+	}
+
+	/* return
+	 *
+	 * */
+	public Course returnunFinishedCourse(Course course){
+		 Course c = null;
+		for(int i = 0; i < unfinishedCourse.size(); ++i){
+			if(unfinishedCourse.get(i).returnCourseName().equals(course.returnCourseName())){
+				c =  unfinishedCourse.get(i);
+				return c;
+			}
+		}
+		return c;
+	}
+
+//========================================================
+
+	/*Find the index of finished course
+	 *
+	 * */
+
+	public int finishedcourseIndex(Course course){
+	 int j = 0;
+	for(int i = 0; i < finishedCourse.size(); ++i){
+		if(finishedCourse.get(i).returnCourseName().equals(course.returnCourseName())){
+				 j = i;
+			return j;
+		}
+	}
+	return j;
+ }
+
+	
+
+	public int unfinishedcourseIndex(Course course){
+	 int j = 0;
+	for(int i = 0; i < finishedCourse.size(); ++i){
+		if(finishedCourse.get(i).returnCourseName().equals(course.returnCourseName())){
+				 j = i;
+			return j;
+		}
+	}
+	return j;
+ }
+//================================================
+
+	
+
+	
+	
+	public void registerTocourse(Course c){
+		if(!isCourseExistedInFinishedCourse(c)){
+			if(!isCourseExistedInunFinishedCourse(c)){
+				this.unfinishedCourse.add(c); 
+			}
+		}
+		
+		else{
+			System.out.println("You are already register for the course"); 
+		}
+
+	}
+
+//=================================================
+
+	public void interactWithStudent(Avatar a, Student s){
+
+		if(isCourseExistedInFinishedCourse(s.returnunFinshedcourse())){
+			if (isCourseExistedInunFinishedCourse(s.returnFinshedcourse())) {
+				int Index = finishedcourseIndex(s.returnunFinshedcourse());
+				Book avatarBook = this.finishedCourse.get(Index).returncourseBook();
+				int IndexforstudentBook = unfinishedcourseIndex(s.returnFinshedcourse()); 
+				Book studentBook = this.unfinishedCourse.get(IndexforstudentBook).returncourseBook(); 
+				System.out.println("Trade with :" + s.name + " "+ avatarBook.returnName()+ " "+" I get: " + studentBook.returnName());
+				this.inventory.dropObject(avatarBook);	
+				this.inventory.addObject(studentBook); 
+			}
+			else {
+				Course course = theWorld.returnCourseFromQuestion(theWorld.returnRandomCourse().returnQuestion());
+				String answer = course.returnAnswer();
+				System.out.println("I got answer as exchange"  + answer);
+			}
+				
+			
+		}
+		else if(!(isCourseExistedInFinishedCourse(s.returnunFinshedcourse()))){
+			System.out.println("You don't have any book that the student needs.");
+
+		}
+
+		
+	}
+
+//=======================================================================================
+
+	public void getQuestionfromTeacher(){
+		Course course = theWorld.returnCourseFromQuestion(theWorld.returnRandomCourse().returnQuestion());
+		String question = course.returnQuestion();
+		String alternativeOne = course.returnAlternativeOne();
+		String alternativeTwo = course.returnAlternativeTwo();
+		String alternativethree = course.returnAnswer();
+		System.out.println(question);
+		System.out.println(alternativeOne);
+		System.out.println(alternativeTwo);
+		System.out.println(course.returnAnswer());
+		Scanner scan1 = new Scanner(System.in);
+		System.out.println("The answer for this question is:");
+		String studentRespond = scan1.nextLine();
+		Random a= new Random();
+		if(this.isCourseExistedInFinishedCourse(course)){
+
+			if(a.nextInt(2)<1){
+				if(!studentRespond.equals(alternativethree)){
+			    System.out.println("The answer is wrong, your Hp deducted by:" + course.resturnHp() + "  " +  "course move to unfinished list, Sorry!");
+				finishedCourse.remove(course);
+				unfinishedCourse.add(course);
+
+				}
+			}
+
+			}
+		else if(this.isCourseExistedInunFinishedCourse(course)){
+
+				if(a.nextInt(4)<3){
+					if(studentRespond.equals(alternativethree)){
+				    System.out.println("The answer is correct, your Hp increase by:" + course.resturnHp() + "  " +  "course move to finished list, Congra");
+					finishedCourse.add(course);
+					unfinishedCourse.remove(course);
+				}
+				}
+			}
+		else {
+
+			if(!this.isCourseExistedInFinishedCourse(course) && !this.isCourseExistedInunFinishedCourse(course)){
+				System.out.println("Enroll: " + course.returnCourseName());
+				unfinishedCourse.add(course);
+			}
+
+		}
+	
+		}
+
+//===================================================
+
+	public int calcualteHp(){
+		int Hp = 180;
+		for(Course c : finishedCourse){
+			Hp += c.resturnHp();
+		}
+		return Hp;
+	}
+	
+	
+	public boolean finishedCourseHptotal(){
+		if(calcualteHp() == 180){
+			return true; 
+		}
+		return false; 
+	}
+	
+	public void printCourse(){
+		for(Course c: this.finishedCourse){
+			System.out.println(c.returnCourseName()); 
+		}
+	}
+	
+	public void printUnfinishedCourse(){
+		for(Course c: this.unfinishedCourse){
+			System.out.println(c.returnCourseName()); 
+		}
+	}
+	
+	public void graduate(){
+		if (this.currentRoom.hasSfinxen()){
+			if (this.finishedCourseHptotal()){
+			System.out.println("Congratulations!");
+			this.printCourse();
+			}
+			else {
+				System.out.println("You have to take more HP!");
+
+			}
+		}
+		else {
+			System.out.println("You can not graduate in this room.");
+
+		}
+	}
+
+	public static void main(String [] args)  throws IOException{
+		String teacherFile = "../Javaparttwo/teacher.text";
+		String bookFile ="../Javaparttwo/book.text";
+		String roomFile = "../Javaparttwo/sr.text";
+		World w = new World();
+		w.createWorld(teacherFile, bookFile, roomFile);
+		Room r = w.getRoomFromName("Room 1357");
+		Avatar a = new Avatar(r,w);
+		System.out.println(a.calcualteHp());
+		//a.getQuestionfromTeacher(); 
+
+		
+		Course course1 = w.returnRandomCourse(); 
+		Course course2 = w.returnRandomCourse(); 
+		Course course3 = w.returnRandomCourse(); 
+		Course course4= w.returnRandomCourse(); 
+		Course course5 = w.returnRandomCourse(); 
+		Course course6 = w.returnRandomCourse(); 
+		String s = w.createRandomStudent().name; 
+		Student student =  new Student(s, course6, course1); 
+		
+		a.changeRoom(Room.Direction.NORTH);
+		a.changeRoom(Room.Direction.EAST);
+		a.changeRoom(Room.Direction.SOUTH);
+		a.changeRoom(Room.Direction.WEST);
+		
+		System.out.println("Room = " + a.returnCurrentRoom().getName());
+		
+		a.registerTocourse(course1); 
+		a.registerTocourse(course2);
+		a.registerTocourse(course3);
+		a.registerTocourse(course4);
+		a.registerTocourse(course1);
+		System.out.println(a.finishedCourse.size());
+		System.out.println(a.unfinishedCourse.size());
+		a.printCourse();
+		a.printUnfinishedCourse(); 
+		/*
+		a.finishedCourse.add(course1); 
+		a.finishedCourse.add(course2); 
+		a.finishedCourse.add(course3); 
+		a.finishedCourse.add(course4); 
+		a.unfinishedCourse.add(course5);
+		a.unfinishedCourse.add(course6);*/
+		
+		//a.getQuestionfromTeacher(); 
+		//a.interactWithStudent(a, student); 
+		//System.out.println(student.returnFinishedcourseBook());
+		//System.out.println(student.unreturnFinishedcourseBook());
+		
+	
+		//System.out.println(course1.returnCourseName());
+	
+
+	 //System.out.println(a.returnCurrentRoom().getName());
+		/*
+	 a.changeRoom(Room.Direction.SOUTH);
+	 System.out.println("Room = " + a.returnCurrentRoom().getName());
+	 a.unlockDoor(Room.Direction.SOUTH);
+	 a.changeRoom(Room.Direction.SOUTH);
+	 System.out.println("Room = " + a.returnCurrentRoom().getName());
+	 a.changeRoom(Room.Direction.NORTH);
+	 System.out.println("Room = " + a.returnCurrentRoom().getName());
+	 a.changeRoom(Room.Direction.EAST);
+	 System.out.println(a.returnCurrentRoom().getName());
+   //System.out.println(a.returnCurrentRoom().getNextRooms()[0]);
+
+	 w.roomdescription("Room 5");
+
+*/
+
+
+	}
+
+
+}

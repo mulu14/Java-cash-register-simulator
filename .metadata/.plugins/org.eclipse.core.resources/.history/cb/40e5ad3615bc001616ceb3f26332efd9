@@ -1,0 +1,36 @@
+import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
+
+import org.junit.Test;
+import junit.framework.*;
+
+
+public class Testavatar {
+@Test
+
+Avatar avatar1;
+Avatar avatar2; 
+
+  private  void AvatarTests(){
+    this.avatar1 = new Avatar();
+    this.avatar2 = new Avatar(); ;
+
+  }
+public void testDirection() throws IOException{
+	Room r = new Room(); 
+    World w = new World(); 
+	Avatar a = new Avatar(r, w); 
+	Avatar a1 = new Avatar(r, w); 
+	assertEquals(a, a1); 
+}
+	
+	public static void main(String [] args) {
+
+
+
+	}
+	
+	
+	
+}

@@ -1,0 +1,101 @@
+import java.util.*; 
+public class Register {
+	 private boolean open; 
+	 private Queue queue; 
+	public Register(boolean status){
+		this.open = status;
+		this.queue = new Queue(); 
+	}
+	
+	public boolean open(){
+		return open = true; 
+	}
+	
+	
+	public boolean close(){
+		return open = false; 
+	}
+	
+	
+	boolean isOpen(){
+		if(open== true)
+			return true; 
+		else
+			return false; 
+	}
+	
+	
+	public void step(){
+			Customer c = queue.first; 
+			c.serve(); 
+			
+		}
+		
+	
+	 public boolean hasCustomer(){
+	        if (queue.length()>0)
+	            {return true;}
+	        else
+	            {return false;}
+	    }
+
+	/*
+	 * I am not sure for this implementation 
+	 * */
+	
+	 public boolean currentCustomerIsDone(){
+	        Customer cust= queue.first();
+	        return cust.isDone();
+	    }
+	
+	
+	 public void addToQueue(Customer c) {
+         Customer cust= queue.first();
+         queue.enqueue(cust);
+   }
+   
+   
+   
+   public Customer removeCurrentCustomer(){
+       return queue.dequeue();
+	
+   }
+   
+
+   public int getQueueLength(){
+       return this.queue.length();
+   }
+	
+	
+	
+	
+	public static void main(String [] args) {
+		 
+		 Customer customer1 = new Customer(2, 6); 
+		 Customer customer2 = new Customer(30, 7); 
+		 Customer customer3 = new Customer(25, 15); 
+		 Customer customer4 = new Customer(60, 30); 
+		 Customer customer5 = new Customer(100,55); 
+		 
+	     Register one = new Register(true); 
+	     one.addToQueue(customer1); 
+	     one.addToQueue(customer2);
+	     one.addToQueue(customer3);
+	     one.addToQueue(customer4); 
+	     one.addToQueue(customer5);
+	     System.out.println("The number of customer in the queue :" + one.getQueueLength());
+	     System.out.println("The register is open :" + one.isOpen());
+	     System.out.println("The register has customer :" + one.hasCustomer());
+	     //one.removeCurrentCustomer();
+	     //System.out.println("The number of customer in the queue :" + one.getQueueLength());
+	     one.step();
+	     one.step();
+	     if (one.currentCustomerIsDone())
+	     {
+	    	 one.removeCurrentCustomer();
+	     }
+	     System.out.println("The number of customer in the queue :" + one.getQueueLength());
+	     
+	}
+
+}

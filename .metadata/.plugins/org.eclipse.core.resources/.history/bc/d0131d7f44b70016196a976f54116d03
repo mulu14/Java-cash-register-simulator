@@ -1,0 +1,20 @@
+
+public class Sfinxen  {
+	String name; 
+	
+	
+public Sfinxen(String sfinxen){
+	this.name = sfinxen; 
+		
+	}
+public String returnSfinxn(){
+	return this.name; 
+}
+	
+	
+public static void main(String [] args) {
+		
+		
+		
+	}
+}

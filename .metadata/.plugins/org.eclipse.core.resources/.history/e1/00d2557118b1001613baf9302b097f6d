@@ -1,0 +1,24 @@
+
+public class Key  implements PlayerItem{
+	
+	private int key; 
+
+	
+	public Key(int key) {
+		super();
+		this.key = key;
+	}
+
+	
+	public int getKey() {
+		return key;
+	}
+
+
+	
+    public boolean isKey(){
+    	return true; 
+    }
+ 
+
+}

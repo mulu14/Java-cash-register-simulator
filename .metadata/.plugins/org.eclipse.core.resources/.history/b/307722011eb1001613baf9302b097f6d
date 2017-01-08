@@ -1,0 +1,60 @@
+import java.util.ArrayList;
+import java.util.Random;
+
+
+public class Key  implements PlayerItem{
+	
+	private String key; 
+
+	
+	public Key(String key) {
+		super();
+		this.key = key;
+	}
+
+	@Override
+	public String toString() {
+		return "Key [key=" + key + "]";
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+
+	public String returnName(){
+		return this.key; 
+	}
+    public boolean isKey(){
+    	return true; 
+    }
+ 
+
+public ArrayList<String> generateString(){
+	int j = 0; 
+	Random ran = new Random();
+	ArrayList<String>randomKey = new ArrayList<String>(); 
+	while(j < 2){
+		char data = ' ';
+		this.key = "";
+
+		for (int i=0; i<= 5; i++) {
+		  data = (char)(ran.nextInt(25)+97);
+		  dat = data + dat;
+		  randomKey.add(dat);
+		}
+		++j; 
+	}
+	return randomKey; 
+}
+
+
+
+public static void main(String [] args) {
+	
+Key k = new Key("Da"); 
+System.out.println(k.generateString());
+
+
+}
+}

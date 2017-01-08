@@ -1,0 +1,288 @@
+import java.io.*;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class Room {
+	String name;
+	String desc;
+	String[] NextRooms;
+	String[] DoorsOpenStatus;
+
+    Teacher teacher;
+	Student student;
+	Key k; 
+	Sfinxen sfix; 
+	//PlayerItem i;
+
+	//=======================================
+	//Contstructors
+	public enum Direction {NORTH, SOUTH, EAST, WEST};
+
+
+	public Room() throws IOException{
+	}
+
+	public Room(String name) throws IOException{
+	this.name= name;
+	this.NextRooms = new String[4];
+	this.DoorsOpenStatus = new String[4];
+
+	}
+	
+	
+
+//===========================
+//Getters
+
+	public String getName(){
+		return this.name;
+	}
+
+	public String[] getNextRooms(){
+		return this.NextRooms;
+	}
+
+	
+	/* To check if all the next rooms are empty
+	 * 
+	 * */
+	public boolean noNextRoom(){
+		boolean allEmpty = true; 
+		for(int i = 0; i < NextRooms.length ; ++i){
+			if(!NextRooms[i].equals("X")){
+				allEmpty = false; 
+			}
+		}
+		
+		return allEmpty; 
+	}
+	
+	public Teacher getTeacher(){
+		return this.teacher;
+	}
+	
+	public Sfinxen returnSfinxen(){
+		return this.sfix;
+	}
+
+	public Student getStudent(){
+		return this.student;
+	}
+	public Key getKeyfromRoom(){
+		return this.k;
+	}
+
+	public String[] getDoorOpenStatus(){
+		return this.DoorsOpenStatus;
+	}
+
+
+	public String getDoorStatus(Direction dir){
+		switch(dir){
+			case NORTH:
+			return this.DoorsOpenStatus[0];
+
+			case EAST:
+			return this.DoorsOpenStatus[1];
+
+			case SOUTH:
+			return this.DoorsOpenStatus[2];
+
+			default:
+			return this.DoorsOpenStatus[3];
+			}
+	}
+
+
+//=================================
+//Setters
+
+	public void setName(String s){
+		this.name = s;
+	}
+
+	public void setRoom(String desc){
+		this.desc= desc;
+	}
+
+	public void setDoorStatus(Direction dir, String status){
+		switch(dir){
+			case NORTH:
+			this.DoorsOpenStatus[0] = status;
+
+			case EAST:
+			this.DoorsOpenStatus[1] = status;
+
+			case SOUTH:
+			this.DoorsOpenStatus[2] = status;
+
+			default:
+			this.DoorsOpenStatus[3] = status;
+			}
+	}
+//==========================================
+
+
+
+	public String getDirection(Direction dir){
+		switch(dir){
+			case NORTH:
+			return this.getNorth();
+
+			case EAST:
+			return this.getEast();
+
+			case SOUTH:
+			return this.getSouth();
+
+			default:
+			return this.getWest();
+			}
+	}
+
+//================================
+
+	public String getNorth(){
+		return this.NextRooms[0];
+	}
+
+	public String getEast(){
+		return this.NextRooms[1];
+	}
+
+	public String getSouth(){
+		return this.NextRooms[2];
+	}
+	public String getWest(){
+			return this.NextRooms[3];
+	}
+
+//======================================
+//Add for X
+	public boolean isOpen(Direction dir){
+		if (getDoorStatus(dir).equals("True")){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+
+//=============================================
+//updates room
+
+	public void updateNextRooms(String[] arr){
+		this.NextRooms[0] = arr[1];
+		this.NextRooms[1] = arr [2];
+		this.NextRooms[2] = arr [3];
+		this.NextRooms[3]= arr [4];
+	}
+
+
+public void updateDoorStatus(String[] arr){
+	this.DoorsOpenStatus[0] = arr[5];
+	this.DoorsOpenStatus[1] = arr [6];
+	this.DoorsOpenStatus[2] = arr [7];
+	this.DoorsOpenStatus[3]= arr [8];
+
+}
+
+
+public void addRandomTeacher(ArrayList<Teacher> arr){
+	Random randomGenerator = new Random();
+	int probability = 70;
+	int randomInt= randomGenerator.nextInt(100);
+	if (randomInt< probability){
+		int index = randomGenerator.nextInt(arr.size());
+		this.teacher = arr.get(index);
+	}
+	else {
+		this.teacher = new Teacher("X");
+	}
+}
+
+
+
+public void addRandomStudent(Student s){
+	this.student = s;
+}
+
+public void addRandomKey(Key k){
+	this.k = k; 
+}
+
+public void addSfinxen(Sfinxen sf){
+	this.sfix = sf; 
+}
+
+public boolean hasSfinxen(){
+	if(this.sfix != null){
+		return true; 
+	}
+	return false; 
+}
+
+//Assertion? Make sure input is a direction
+private Direction oppositeDirection(Direction dir){
+	switch(dir){
+		case NORTH:
+		return Direction.SOUTH;
+
+		case EAST:
+		return Direction.WEST;
+
+		case SOUTH:
+		return Direction.NORTH;
+
+		default:
+		return Direction.EAST;
+		}
+}
+
+public void unlockDoor(Direction dir, Room nextRoom){
+//this.changeOpenstatus(direction, nextRoom);
+this.setDoorStatus(dir, "True");
+nextRoom.setDoorStatus(oppositeDirection(dir), "True");
+}
+
+
+
+public void printRoomInfo() {
+System.out.println("\nYou look arount in the room.");
+if (this.getTeacher().getTeachername() != null) {
+	System.out.println("There is a teacher in the room: " + this.getTeacher().getTeachername());
+}
+else {
+System.out.println("There is no techer in the room");
+}
+System.out.println("There is a student in the room: " + this.getStudent().getName() + "\n");
+
+if (this.getKeyfromRoom().returnKeyName() != null) {
+	System.out.println("There is a key in this room!"); //+ this.getKeyfromRoom().returnKeyName());
+}
+
+}
+
+
+
+
+	public static void main(String [] args) throws IOException {
+
+		
+
+
+
+
+
+
+	}
+
+	
+
+
+
+
+
+}

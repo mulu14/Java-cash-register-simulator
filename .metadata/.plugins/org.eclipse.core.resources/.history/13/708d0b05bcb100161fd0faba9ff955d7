@@ -1,0 +1,445 @@
+import java.util.ArrayList;
+import java.util.Random;
+import java.io.IOException;
+
+
+
+public class World {
+	private Avatar a;
+	private ArrayList<Room> WorldRooms;
+	private ArrayList<Teacher> allTeachers;
+	private ArrayList<Student> allStudents;
+	private ArrayList<Book> allBooks;
+	private ArrayList<Course> allCourses;
+	private ArrayList<Key> allKeys;
+	
+	
+	public World() throws IOException{
+	this.WorldRooms = new ArrayList<Room>();
+	this.allTeachers = new ArrayList<Teacher>();
+	this.allBooks = new ArrayList<Book>();
+	this.allCourses = new ArrayList<Course>(); 
+	this.allKeys = new ArrayList<Key>(); 
+	}
+
+	
+
+//==============================================
+//Getters
+	public ArrayList<Room> returnWorldRooms() {
+		return this.WorldRooms;
+	}
+
+	public ArrayList<Teacher> returnAllTeachers() {
+		return this.allTeachers;
+	}
+	
+	public ArrayList<Course> returnAllCourses() {
+		return this.allCourses;
+	}
+	
+	
+	public Course findcourse(String s){
+	    for(int i = 0; i < allCourses.size(); ++i){
+	    	if(allCourses.get(i).returnCourseName().equals(s)){
+	    		return allCourses.get(i); 
+	    	}
+	    }
+	
+		
+		return null; 
+	}
+	
+	public void getQuestionfromTeacher(String s){
+		Random a= new Random();
+		String answer[] = {"Wrong","Right","Wrong"};
+		String Questions1[] = {"Yes", "No", "Yes", "Yes"};
+		String Questions2[] = {"Yes", "No"};
+		int probablityOfanswer = a.nextInt(3);
+		int probablityOffour = a.nextInt(4);
+		int probablityOftwo = a.nextInt(2);
+		if(this.isCourseExistedInFinishedCourse(s)){
+			if(Questions2[probablityOftwo].equals("Yes")){
+				if(answer[probablityOfanswer].equals("Wrong")){
+				Course c = returnunFinishedCourse(s); 
+				unfinishedCourse.add(c);
+				finishedCourse.remove(c);
+				}
+			}
+			}
+		else if(this.isCourseExistedInunFinishedCourse(s)){
+				if(Questions1[probablityOffour].equals("Yes")){
+					Course c = returnunFinishedCourse(s); 
+					finishedCourse.add(c);
+					unfinishedCourse.remove(c);
+				}
+			}
+		else {
+			if(!this.isCourseExistedInFinishedCourse(s) && !this.isCourseExistedInunFinishedCourse(s)){
+				Course c = theWorld.findcourse(s); 
+				System.out.println("enroll: " + c.returnCourseName());
+				unfinishedCourse.add(c);
+			}
+		}
+		}
+
+	
+	
+	
+	public void createCoursesList() throws IOException{
+		String[] array = this.getTeacherArray();
+		for (String s : array) {
+			String[] course =s.split(";");
+			//Change to: Get the right book!
+			Book b = this.allBooks.get(0); //getBookFromName(course[2])
+			int HP = Integer.parseInt(course[3]);
+			Course c = new Course(course[1], b, HP);
+			this.allCourses.add(c);
+		}
+}
+
+	public Student createRandomStudent(){
+		Random a = new Random();
+		String names[] = {"Maria","Lucas","Peter","Sara","Anna","Linus","Joana","Siri","Lina","Jakob","Jefar","Nina","Hanna","Joel","Obama","Mulugeta","Rahel","Christina" };
+		int randomIndex= a.nextInt(18);
+		int randomCourseIndex1 = a.nextInt(this.allCourses.size());
+		int randomCourseIndex2 = a.nextInt(this.allCourses.size());
+
+		String studentName = names[randomIndex];
+		Course unfinished =this.allCourses.get(randomCourseIndex1);
+		Course finished =this.allCourses.get(randomCourseIndex2);
+		Student s = new Student(studentName, finished, unfinished);
+		return s;
+	}
+	
+//==============================================
+//Teacher_list
+
+	public void createTeacherList() throws IOException{
+		String[] array = this.getTeacherArray();
+		for (String s : array) {
+			String[] oneTeacher =s.split(";");
+			Teacher t = new Teacher(oneTeacher[0]);
+			int HP = Integer.parseInt(oneTeacher[3]);
+			Book b = this.allBooks.get(0);
+			Course c = new Course(oneTeacher[1], b, HP);
+			t.connectCourse(c);
+			this.allTeachers.add(t);
+		}
+	}
+
+//==============================================
+//Create World
+	public void createWorld() throws IOException{
+		String[] array = this.getRooms();
+		for (String s : array) {
+			String[] RoomsAttributes =s.split(";");
+			Room r = new Room(RoomsAttributes[0]);
+			r.updateNextRooms(RoomsAttributes);
+			r.updateDoorStatus(RoomsAttributes);
+			r.addRandomTeacher(this.allTeachers);
+			r.addRandomBook(allBooks);
+			r.addRandomKey(allKeys); 
+			Student student= createRandomStudent();
+			r.addRandomStudent(student);
+			this.WorldRooms.add(r);
+		}
+	}
+
+//===============================================
+
+public void createBooks() throws IOException{
+	String[] array = this.getBookArray();
+	for (String s : array) {
+		String[] BookInfo =s.split(";");
+		int year = Integer.parseInt(BookInfo[2]);
+		int edition = Integer.parseInt(BookInfo[3]);
+
+		Book b = new Book(BookInfo[0], BookInfo[1], year, edition);
+
+		this.allBooks.add(b);
+	}
+}
+
+public void createKey(){
+	Random ran = new Random();
+	String keys[] = {"Key1","key2","key3","Key4","Key5","Key6","Key7","Key8","Key9","Key10","Key11","Key12","Key13","key14",
+			"key15","key17","key18","key19", "key20"};
+	int randomIndex= ran.nextInt(19);
+	Key k = new Key(keys[randomIndex]); 
+	allKeys.add(k); 
+}
+
+//======================================
+//Search room
+
+public Room getRoomFromName(String name){
+	Room room = null;
+	for(Room r : this.WorldRooms){
+		if (r.getName().equals(name)){
+			room= r;
+		}
+	}
+		return room;
+}
+
+//================================================
+//Read thing
+
+//These two are doing the same thing (pretty much). Same function later?
+public String[] getRooms() throws IOException{
+
+String file_name = "../Javaparttwo/sr.text";
+String[] LineArray = null;
+try {
+	ReadFile file = new ReadFile(file_name);
+ LineArray = file.OpenFile();
+}
+
+	catch (IOException e) {
+		System.out.println (e.getMessage());
+	}
+	return LineArray;
+}
+
+//===============================================
+
+public String[] getTeacherArray() throws IOException{
+
+String file_name = "../Javaparttwo/teacher.text";
+String[] LineArray = null;
+try {
+	ReadFile file = new ReadFile(file_name);
+ 	LineArray = file.OpenFile();
+}
+
+	catch (IOException e) {
+		System.out.println (e.getMessage());
+	}
+	return LineArray;
+}
+
+//===============================================
+
+public String[] getBookArray() throws IOException{
+
+String file_name = "../Javaparttwo/book.text";
+String[] LineArray = null;
+try {
+	ReadFile file = new ReadFile(file_name);
+ 	LineArray = file.OpenFile();
+}
+
+	catch (IOException e) {
+		System.out.println (e.getMessage());
+	}
+	return LineArray;
+}
+//===============================================
+
+public String isdoorOpenatRoom(String door){
+	String checkdoor = null; 
+	if(door.equals("False")){
+		checkdoor = "Open"; 
+	}
+	else{
+		checkdoor ="Closed"; 
+	}
+	return checkdoor; 
+}
+
+
+
+public void roomdescription(String room){
+	Room r = getRoomFromName(room); 
+	String [] rooms = r.getNextRooms(); 
+	String [] openStatus = r.getDoorOpenStatus(); 
+	System.out.println(r.getName()); 
+	if(rooms[0].equals("X")){
+		System.out.println("There is no room north of current room");
+	}
+	else{
+		System.out.println("The room north of current room is" + rooms[0]);
+	}
+	if(rooms[1].equals("X")){
+		System.out.println("There is no room east of current room");
+	}
+	else{
+		System.out.println("The room east of current room is" + rooms[1]);
+	}
+	if(rooms[2].equals("X")){
+		System.out.println("There is no room south of current room");
+	}
+	else{
+		System.out.println("The room south of current room is" + rooms[2]);
+	}
+	if(rooms[3].equals("X")){
+		System.out.println("There is no room west of current room");
+	}
+	else{
+		System.out.println("The room west of current room is" + rooms[3]);
+	}
+	
+	
+	//-----------------------------------------------------------------
+	
+	if(openStatus[0].equals("X")){
+		System.out.println("There is no door at the noth side of room");
+	}
+	else{
+		System.out.println("The you find the door in north of room and it is: " + isdoorOpenatRoom(rooms[0]));
+	}
+	
+	if(openStatus[1].equals("X")){
+		System.out.println("There is no door at the east side of room");
+	}
+	else{
+		System.out.println("The you find the door in east of room and it is: " + isdoorOpenatRoom(rooms[1]));
+	}
+	if(openStatus[2].equals("X")){
+		System.out.println("There is no door at the south side of room");
+	}
+	else{
+		System.out.println("The you find the door in south of room and it is: " + isdoorOpenatRoom(rooms[2]));
+	}
+	if(openStatus[3].equals("X")){
+		System.out.println("There is no door at the west side of room");
+	}
+	else{
+		System.out.println("The you find the door in west side of room and it is: " + isdoorOpenatRoom(rooms[3]));
+	}
+	
+	
+}
+
+
+
+
+public static void main(String [] args) throws IOException {
+	World w = new World();
+	w.createBooks();
+	System.out.println(w.allBooks.get(0).returnName());
+	w.createCoursesList();
+	w.createTeacherList();
+	w.createWorld();
+	w.createKey(); 
+	w.allKeys.get(0).getKey();
+	System.out.println(w.getRoomFromName("Room 1357").getStudent().getStudentname());
+	System.out.println(w.getRoomFromName("Room 1357").getBook().returnName());
+//System.out.println(w.getRoomFromName("Room 1357").getTeacher().getTeachername());
+
+//System.out.println(w.returnAllTeachers().get(0).getTeachername());
+//System.out.println(w.returnAllTeachers().get(0).getTeachercourse().returnCourseName());
+//System.out.println(w.returnWorldRooms());
+//Room r = w.returnWorldRooms().get(0);
+//System.out.println(r.getName());
+//System.out.println(r.getNextRooms()[0]);
+//System.out.println(w.getRoomFromName("Room 1357"));
+
+
+
+
+
+
+
+
+
+}
+	/*
+	public Room roomToNorth(Room r){
+		return this.north = r;
+
+	}
+
+	public Room roomToSouth(Room r){
+		return this.south = r;
+
+		}
+
+	public Room roomToWest(Room r){
+		return this.west = r;
+	}
+
+	public Room roomToEast(Room r){
+		return this.east = r;
+
+}*/
+
+	/*
+
+	public void direction(Avatar a, Room r){
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Move to:");
+		String direction = sc.nextLine();
+		switch(direction.toUpperCase()){
+		case "NORTH":
+			a.currentRoom.roomToNorth(r);
+			break;
+		case "SOUTH":
+			a.currentRoom.roomToSouth(r);
+			break;
+		case "EAST":
+			a.currentRoom.roomToEast(r);
+			break;
+		case "WEAST":
+			a.currentRoom.roomToWest(r);
+			break;
+
+		default:
+			System.out.println(direction + "Wrong direction, Try again.");
+			direction = sc.nextLine();
+		}
+		sc.close();
+	}
+	*/
+/*
+public static void main(String [] args) throws FileNotFoundException {
+
+	BufferedReader br = null;
+
+	try {
+
+		String line;
+br = new BufferedReader(new FileReader("C:/Users/Sundsvall/Documents/IOOPM/java/inlupp4/RoomFile.txt
+"));
+	//	br = new BufferedReader(new FileReader("../Javaparttwo/sr.text"));
+
+		while ((line = br.readLine()) != null) {
+		   System.out.println(line);
+
+		   StringTokenizer stringTokenizer = new StringTokenizer(line, ";");
+
+		   while (stringTokenizer.hasMoreElements()) {
+
+		    String Room = stringTokenizer.nextElement().toString();
+		    String North = stringTokenizer.nextElement().toString();
+		    String East = stringTokenizer.nextElement().toString();
+		    String South = stringTokenizer.nextElement().toString();
+		    String West = stringTokenizer.nextElement().toString();
+		    String northdirection = stringTokenizer.nextElement().toString();
+		    String eastdirection = stringTokenizer.nextElement().toString();
+		    String southdirection = stringTokenizer.nextElement().toString();
+		    String westdirection = stringTokenizer.nextElement().toString();
+		   }
+		}
+
+
+	} catch (IOException e) {
+		e.printStackTrace();
+	} finally {
+		try {
+			if (br != null)
+				br.close();
+
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	}
+
+*/
+
+
+
+}

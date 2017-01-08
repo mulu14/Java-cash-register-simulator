@@ -1,0 +1,91 @@
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class Bag{
+	 List<PlayerItem> itemList; 
+	 int size; 
+	 
+	
+	public Bag(){
+		this.itemList = new ArrayList<PlayerItem>(); 
+	}
+
+
+	public void addObject(Object a){
+		if (this.BagIsFull()){
+			System.out.println("The bag is full. You need to drop one item to pick up a new one."); 
+		}
+		else{
+		itemList.add((PlayerItem) a); 
+		++size; 
+		}
+	}
+	
+	public void printBag(){
+        if(itemList.size() == 0){
+        	System.out.println("The list is empty"); 
+        }
+        else{
+        	
+        	for(int i = 0; i < itemList.size(); ++i){
+    			System.out.println(this.itemList.get(i).returnName()); 
+    		}
+        }
+		
+	}
+
+	public boolean isKey(){
+    	boolean found = false; 
+    	for(int i = 0; i < itemList.size(); ++i){
+    		if(itemList.get(i) instanceof Key){
+    			found = true; 
+    			return found; 
+    		}
+    	}
+    	return false; 
+    }
+	public Object returnIndexitem(int i){
+			assert(itemList.size() >=i); 
+			return itemList.get(i); 
+	}
+
+	
+	public Object dropItem(int i){
+		assert(itemList.size() >=i); 
+		return itemList.remove(i); 
+}
+
+	public boolean BagIsFull(){
+		if(this.size ==10)
+			return true; 
+		return false;
+	}
+	
+	
+	
+public static void main(String [] args) {
+		
+		Book b = new Book("Data", "James", 2017, 7); 
+		Book c = new Book("Data", "James", 2017, 7); 
+		Book d = new Book("Data", "James", 2017, 7); 
+		Book e = new Book("Data", "James", 2017, 7); 
+		//Book f = new Book("Data", "James", 2017, 7); 
+		Key k = new Key(); 
+		
+		Bag ba = new Bag(); 
+		ba.addObject(k); 
+		ba.addObject(b); 
+		//ba.addObject(c);
+		//ba.addObject(d);
+		//ba.addObject(e);
+		//ba.addObject(f);
+		//ba.printBag(); 
+		//ba.dropItem(0);
+		//ba.printBag(); 
+		System.out.println(ba.returnIndexitem(0) instanceof Key); 
+		System.out.println(ba.returnIndexitem(1) instanceof Key); 
+		
+	}
+
+}

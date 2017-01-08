@@ -1,0 +1,41 @@
+import static org.junit.Assert.assertEquals;
+import java.io.IOException;
+
+import org.junit.Test;
+import junit.framework.*;
+import static org.junit.Assert.*;
+
+public class Testavatar {
+
+	
+  @Test
+public void testCurrentRoom() throws IOException{
+	Room r = new Room();
+	r.setName("Room 5");
+	Avatar a = new Avatar(); 
+	a.setNewRoom(r); 
+	assertNotNull(r); 
+	assertNotNull(a); 
+	assertEquals(a.currentRoom, r); 
+	assertEquals(a.currentRoom, r); 
+}
+  
+@Test 
+public void testcouseunFinishedcourse() throws IOException{
+    String filePath = "../Javaparttwo/teacher.text";
+	World w = new World();
+	w.createCoursesList(filePath);  
+	Avatar a = new Avatar();
+	assertNotNull(w); 
+	assertNotNull(a);
+	Course c1 = w.returnRandomCourse(); 
+	Course c2 = w.returnRandomCourse(); 
+	Course c3 = w.returnRandomCourse(); 
+	Course c4 = w.returnRandomCourse(); 
+	
+	
+}
+
+	
+	
+}

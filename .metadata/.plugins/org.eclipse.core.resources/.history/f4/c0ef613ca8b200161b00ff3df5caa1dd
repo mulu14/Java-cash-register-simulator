@@ -1,0 +1,52 @@
+
+public class Student {
+	public String studentName;
+	private Course finishedcourse;
+	private Course unfinishedcourse;
+
+	public Student(){
+
+	}
+
+	public String getStudentname(){
+		return this.studentName;
+	}
+
+	 public Student(String name, Course finshed, Course unfinshed){
+		this.studentName =  name;
+		this.finishedcourse = finshed;
+		this.unfinishedcourse = unfinshed;
+	}
+
+
+	public Student(String name){
+		this.studentName =  name;
+		this.finishedcourse = new Course();
+		this.unfinishedcourse = new Course();
+	}
+
+	public String returnFinishedcourseBook(){
+		return this.finishedcourse.returncourseBookName();
+	}
+	public Course returnFinshedcourse(){
+		return this.finishedcourse;
+	}
+
+
+	public Course returnunFinshedcourse(){
+		return this.unfinishedcourse;
+	}
+
+	public Book returnFinshedcourseBook(){
+		return finishedcourse.returncourseBook();
+	}
+
+
+
+public static void main(String [] args) {
+
+
+
+	}
+
+}
